@@ -50,18 +50,5 @@ namespace TMS.WebAPI.Controllers
 
             return Ok(result);
         }
-
-        [HttpPost("add-role-permission")]
-        public async Task<IActionResult> AddPermission(string roleName, Permissions value)
-        {
-            var result = await _identityService.AddPermissionToRoleAync(roleName, value);
-
-            if (!result.Succeded)
-            {
-                return StatusCode(result.StatusCode, result.Message);
-            }
-
-            return Ok(result);
-        }
     }
 }

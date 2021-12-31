@@ -9,8 +9,7 @@ namespace TMS.Application.Interfaces
         #region Roles
         IEnumerable<string> GetAllRoles();
         Task<Result> CreateRoleAsync(string roleName);
-        Task<Result> DeleteRoleAsync(string roleName);
-        Task<Result> AddPermissionToRoleAync(string roleName, Permissions value);       
+        Task<Result> DeleteRoleAsync(string roleName);      
         #endregion
 
 
@@ -21,6 +20,7 @@ namespace TMS.Application.Interfaces
         Task<Result> DeleteUserAsync(string userName);
         Task<Result> AssignUserToRoleAsync(string userName, string roleName);
         Task<Result> RemoveUserFromRoleAsync(string userName, string roleName);
+        Task<Result> AddPermissionToUserAync(string userName, Permissions value);
         #endregion
     }
 }

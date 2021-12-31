@@ -27,20 +27,20 @@ namespace TMS.Infrastructure.Identity
             _jwtOptions = options.Value;
         }
 
-        public async Task<Result> AddPermissionToRoleAync(string roleName, Permissions value)
+        public async Task<Result> AddPermissionToUserAync(string userName, Permissions value)
         {
-            var role = await _roleManager.FindByNameAsync(roleName);
-            if (role is null)
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user is null)
             {
                 return new Result
                 {
                     StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = $"The role {roleName} not found!",
+                    Message = $"The user {user} not found!",
                     Succeded = false
                 };
             }
 
-            var result = await _roleManager.AddClaimAsync(role, new Claim(nameof(CustomClaimTypes.Permission), value.ToString()));
+            var result = await _userManager.AddClaimAsync(user, new Claim(nameof(CustomClaimTypes.Permission), value.ToString()));
             if (!result.Succeeded)
             {
                 Result responseModel = new()
@@ -58,7 +58,7 @@ namespace TMS.Infrastructure.Identity
             return new Result
             {
                 StatusCode = (int)HttpStatusCode.OK,
-                Message = "Role claims added successfully!",
+                Message = "The user permission added successfully!",
                 Succeded = true
             };
         }

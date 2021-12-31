@@ -36,7 +36,7 @@ namespace TMS.WebAPI
             services.Configure<JwtOptions>(Configuration.GetSection("JWT"));
 
             services.AddTransient<IIdentityService, IdentityService>();
-            services.AddScoped<IRepository<TaskEntity, Guid>, TaskRepositories>();
+            services.AddScoped<IRepository<TaskEntity, Guid>, TaskRepository>();
             services.AddTransient<IFileService, FileService>();
 
             services.AddControllers();

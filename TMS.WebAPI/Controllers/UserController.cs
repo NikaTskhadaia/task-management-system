@@ -8,6 +8,7 @@ namespace TMS.WebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize(Roles = "Admin")]
     public class UserController : ControllerBase
     {
         private readonly IIdentityService _identityService;
@@ -18,7 +19,6 @@ namespace TMS.WebAPI.Controllers
         }
 
         [HttpGet("all")]
-        [Authorize(Roles = "Admin")]
         public IActionResult GetAll()
         {
             var result = _identityService.GetAllUsers();
@@ -26,6 +26,7 @@ namespace TMS.WebAPI.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] UserModel userModel)
         {
             (JwtResult jwtResult, bool authorized) = await _identityService.LoginAsync(userModel);
@@ -39,7 +40,6 @@ namespace TMS.WebAPI.Controllers
         }
 
         [HttpPost("create")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] UserModel userModel)
         {
             var result = await _identityService.CreateUserAsync(userModel);
@@ -53,7 +53,6 @@ namespace TMS.WebAPI.Controllers
         }
 
         [HttpDelete("delete")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(string name)
         {
             var result = await _identityService.DeleteUserAsync(name);
@@ -67,7 +66,6 @@ namespace TMS.WebAPI.Controllers
         }
 
         [HttpPost("assign-role")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AssignToRole(string userName, string roleName)
         {
             var result = await _identityService.AssignUserToRoleAsync(userName, roleName);
@@ -81,10 +79,22 @@ namespace TMS.WebAPI.Controllers
         }
 
         [HttpPost("dismiss-role")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> RemoveFromRole(string userName, string roleName)
         {
             var result = await _identityService.RemoveUserFromRoleAsync(userName, roleName);
+
+            if (!result.Succeded)
+            {
+                return StatusCode(result.StatusCode, result.Message);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPost("add-user-permission")]
+        public async Task<IActionResult> AddPermission(string userName, Permissions value)
+        {
+            var result = await _identityService.AddPermissionToUserAync(userName, value);
 
             if (!result.Succeded)
             {

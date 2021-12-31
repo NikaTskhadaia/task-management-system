@@ -10,12 +10,12 @@ using TMS.Infrastructure.Persistence;
 
 namespace TMS.Infrastructure.Repositories
 {
-    public class TaskRepositories : IRepository<TaskEntity, Guid>
+    public class TaskRepository : IRepository<TaskEntity, Guid>
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<AppUser> _userManager;
 
-        public TaskRepositories(ApplicationDbContext context, UserManager<AppUser> userManager)
+        public TaskRepository(ApplicationDbContext context, UserManager<AppUser> userManager)
         {
             _context = context;
             _userManager = userManager;
