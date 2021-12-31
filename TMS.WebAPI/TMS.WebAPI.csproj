@@ -24,8 +24,4 @@
     <ProjectReference Include="..\TMS.Data\TMS.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="TaskFiles\" />
-  </ItemGroup>
-
 </Project>
