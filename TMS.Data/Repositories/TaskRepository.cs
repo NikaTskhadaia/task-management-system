@@ -28,7 +28,7 @@ namespace TMS.Infrastructure.Repositories
             {
                 throw new InvalidOperationException("The user does not exist");
             }
-            var result = await _context.Tasks.AddAsync(entity);
+            await _context.Tasks.AddAsync(entity);
             await _context.SaveChangesAsync();
             return entity.Id;
         }

@@ -19,9 +19,9 @@ namespace TMS.Infrastructure.Files
             _hostingEnvironment = hostingEnvironment;
         }
 
-        public async Task<IDictionary<Guid, string>> UploadFileAsync(List<IFormFile> files, string subDirectory)
+        public async Task<IEnumerable<string>> UploadFileAsync(List<IFormFile> files, string subDirectory)
         {
-            Dictionary<Guid, string> paths = new();
+            List<string> paths = new();
             string directory = $"TaskFiles/{DateTime.Now.Year}/{DateTime.Now.Month}";
             var target = Path.Combine(_hostingEnvironment.ContentRootPath, directory, subDirectory);
 
@@ -32,9 +32,10 @@ namespace TMS.Infrastructure.Files
                 var filePath = Path.Combine(target, file.FileName);
                 using var stream = new FileStream(filePath, FileMode.Create);
                 await file.CopyToAsync(stream);
-                paths.Add(Guid.NewGuid(), filePath);
+                paths.Add(filePath);
             }
-            return paths;
+            
+            return Directory.GetFiles(target);
         }
 
         public (string fileType, byte[] archiveData, string archiveName) DownloadFiles(string subDirectory)

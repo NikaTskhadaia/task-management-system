@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json;
+﻿using System.Collections.Generic;
+using System.Text;
 
 namespace TMS.Domain.ValueObjects
 {
@@ -11,29 +10,23 @@ namespace TMS.Domain.ValueObjects
 
         }
 
-        public TaskFiles(IDictionary<Guid, string> filePaths)
+        public TaskFiles(IEnumerable<string> filePaths)
         {
             FilePaths = SerializeFilePaths(filePaths);
         }
 
         public string FilePaths { get; private set; }
 
-        private string SerializeFilePaths(IDictionary<Guid, string> filePaths)
+        private static string SerializeFilePaths(IEnumerable<string> filePaths)
         {
-            Dictionary<Guid, string> existingFiles = new();
-
-            if (!string.IsNullOrEmpty(FilePaths))
-            {
-                existingFiles = JsonSerializer.Deserialize<Dictionary<Guid, string>>(FilePaths);
-            }
+            StringBuilder sb = new();
 
             foreach (var item in filePaths)
             {
-                existingFiles[item.Key] = item.Value;
+                sb.Append($"{item};");
             }
 
-            var result = JsonSerializer.Serialize(existingFiles);
-            return result;
+            return sb.ToString();
         }
     }
 }

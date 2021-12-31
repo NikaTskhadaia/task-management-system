@@ -7,7 +7,7 @@ namespace TMS.Application.Interfaces
 {
     public interface IFileService
     {
-        Task<IDictionary<Guid, string>> UploadFileAsync(List<IFormFile> files, string subDirectory);
+        Task<IEnumerable<string>> UploadFileAsync(List<IFormFile> files, string subDirectory);
         (string fileType, byte[] archiveData, string archiveName) DownloadFiles(string subDirectory);
     }
 }
