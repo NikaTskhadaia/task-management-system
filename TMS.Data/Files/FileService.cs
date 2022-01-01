@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using TMS.Application.Interfaces;
 
@@ -19,7 +20,7 @@ namespace TMS.Infrastructure.Files
             _hostingEnvironment = hostingEnvironment;
         }
 
-        public async Task<IEnumerable<string>> UploadFileAsync(List<IFormFile> files, string subDirectory)
+        public async Task<IEnumerable<string>> UploadFileAsync(List<IFormFile> files, string subDirectory, CancellationToken cancellationToken)
         {
             List<string> paths = new();
             string directory = $"TaskFiles/{DateTime.Now.Year}/{DateTime.Now.Month}";
@@ -31,14 +32,14 @@ namespace TMS.Infrastructure.Files
                 if (file.Length <= 0) continue;
                 var filePath = Path.Combine(target, file.FileName);
                 using var stream = new FileStream(filePath, FileMode.Create);
-                await file.CopyToAsync(stream);
+                await file.CopyToAsync(stream, cancellationToken);
                 paths.Add(filePath);
             }
             
             return Directory.GetFiles(target);
         }
 
-        public (string fileType, byte[] archiveData, string archiveName) DownloadFiles(string subDirectory)
+        public (string fileType, byte[] archiveData, string archiveName) DownloadFiles(string subDirectory, CancellationToken cancellationToken)
         {
             var zipName = $"archive-{DateTime.Now:yyyy_MM_dd-HH_mm_ss}.zip";
 
@@ -47,11 +48,12 @@ namespace TMS.Infrastructure.Files
             using var memoryStream = new MemoryStream();
             using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
             {
-                files.ForEach(file =>
+                files.ForEach(async file =>
                 {
                     var theFile = archive.CreateEntry(file);
                     using var streamWriter = new StreamWriter(theFile.Open());
-                    streamWriter.Write(File.ReadAllText(file));
+                    var currentFile = await File.ReadAllTextAsync(file, cancellationToken);
+                    await streamWriter.WriteAsync(currentFile.ToCharArray(), cancellationToken);
 
                 });
             }
