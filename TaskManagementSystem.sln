@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TMS.WebAPI", "TMS.WebAPI\TMS.WebAPI.csproj", "{9B87E216-E3D8-4B47-B381-58D21C9450D6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TMS.Infrastructure", "TMS.Data\TMS.Infrastructure.csproj", "{0AD9F7C8-1B6E-40F1-837B-C22A870BC6AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TMS.Infrastructure", "TMS.Infrastructure\TMS.Infrastructure.csproj", "{0AD9F7C8-1B6E-40F1-837B-C22A870BC6AF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TMS.Domain", "TMS.Domain\TMS.Domain.csproj", "{24ACC9E9-8E2C-4E21-B529-E2BE01EB4726}"
 EndProject
